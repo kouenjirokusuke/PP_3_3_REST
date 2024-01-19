@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin panel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+          crossorigin="anonymous">
+</head>
+<body>
+<div id="header" class="d-flex bg-dark">
+    <div id="header_email" class="p-2 text-white fw-bold"></div>
+    <div id="header_roles" class="p-2 w-100 text-white"></div>
+    <a class="p-2 text-secondary text-right text-decoration-none" href="/logout"> Logout </a>
+</div>
+<div class="row g-0">
+    <div class="col-2 mt-3">
+        <div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
+            <a id="admin_tab" class="nav-item nav-link ml-2 active" data-toggle="pill" href="#admin_panel"
+               role="tab" aria-controls="admin_panel" aria-selected="true">Admin</a>
+            <a id="user_tab" class="nav-item nav-link ml-2" data-toggle="pill" href="#user_panel"
+               role="tab" aria-controls="user_panel" aria-selected="true">User</a>
+        </div>
+    </div>
+    <div class="col-10">
+        <div class="tab-content bg-light p-3 ps-4">
+            <div class="tab-pane fade show active" style="height: 1000px;" id="admin_panel" role="tabpanel"
+                 aria-labelledby="admin_panel">
+                <h1>Admin panel</h1>
+                <nav>
+                    <div class="nav nav-tabs" role="tablist">
+                        <a class="nav-item nav-link active" data-toggle="tab" role="tab" href="#users_table">Users
+                            table</a>
+                        <a class="nav-item nav-link" data-toggle="tab" role="tab" href="#new_user">New User</a>
+                    </div>
+                </nav>
+                <div class="tab-content">
+                    <div class="tab-pane fade show active border" id="users_table" role="tabpanel">
+                        <div class="d-flex border-bottom ps-4 pt-3 pb-2"><h5>All users</h5></div>
+                        <div class="bg-white p-3">
+                            <table class="table table-striped border-top">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Age</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Edit</th>
+                                    <th>Delete</th>
+                                </tr>
+                                </thead>
+                                <tbody id="tBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade border" id="new_user" role="tabpanel">
+                        <div class="d-flex border-bottom ps-4 pt-3 pb-2"><h5> Add new user</h5></div>
+                        <div class="bg-white text-center p-3">
+                            <form id="formNewUser" style="width: 300px;"
+                                  class="form-signin mx-auto fw-bold" >
+                                <p>
+                                    <label>First name</label>
+                                    <input class="form-control form-control-sm" type="text"
+                                           id="newFirstName" placeholder="First name" required autofocus>
+                                </p>
+                                <p>
+                                    <label>Last name</label>
+                                    <input class="form-control form-control-sm" type="text" required
+                                           id="newLastName" placeholder="Last name">
+                                </p>
+                                <p>
+                                    <label>Age</label>
+                                    <input class="form-control form-control-sm" type="number" required
+                                           id="newAge" placeholder="Age" value="">
+                                </p>
+                                <p>
+                                    <label>Email</label>
+                                    <input class="form-control form-control-sm" type="email"
+                                           id="newEmail" placeholder="Email" required>
+                                </p>
+                                <p>
+                                    <label>Password</label>
+                                    <input class="form-control form-control-sm" type="password"
+                                           id="newPassword" placeholder="Password" required>
+                                </p>
+                                <p>
+                                    <label>Role</label>
+                                    <select id="newRoles" class="form-control form-control-sm" multiple size="2" required>
+                                        <option value="USER" label="USER"></option>
+                                        <option value="ADMIN" label="ADMIN"></option>
+                                    </select>
+                                </p>
+                            </form>
+                            <button onclick="newUser()" class="btn btn-success">Add new user</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="tab-pane fade ps-3" style="height: 1000px;" id="user_panel" role="tabpanel"
+                 aria-labelledby="user_panel">
+                <h1>User information-page</h1>
+                <div class="d-flex border-start border-end border-top ps-4 pt-3 pb-2"><h5> About user</h5></div>
+                <div class="bg-white border p-3">
+                    <table class="table table-striped border-top">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Age</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                        </tr>
+                        </thead>
+                        <tbody id="user_info"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modalWindow"></div>
+<div id="NewUserCreated" class="modal fade mx-auto" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm mx-auto" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">New User created!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+        crossorigin="anonymous"></script>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"
+        integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/"
+        crossorigin="anonymous"></script>
+
+<script src="/newUser.js"></script>
+<script src="/deleteUser.js"></script>
+<script src="/editUser.js"></script>
+<script src="/getModalDelete.js"></script>
+<script src="/getModalEdit.js"></script>
+<script src="/listRoles.js"></script>
+<script src="/showAllUsers.js"></script>
+<script src="/showHeader.js"></script>
+<script src="/showUserInfo.js"></script>
+
+</body>
+</html>
